@@ -11,12 +11,11 @@ import cn from '@hey/ui/cn';
 import { Leafwatch } from '@lib/leafwatch';
 import type { DecodedMessage } from '@xmtp/xmtp-js';
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import { MessageTabs } from 'src/enums';
 import { useMessageDb } from 'src/hooks/useMessageDb';
 import { useAppStore } from 'src/store/useAppStore';
-import { useMessagePersistStore } from 'src/store/useMessagePersistStore';
 import type { TabValues } from 'src/store/useMessageStore';
 import { useMessageStore } from 'src/store/useMessageStore';
 import { usePreferencesStore } from 'src/store/usePreferencesStore';
@@ -44,22 +43,11 @@ const PreviewList: FC<PreviewListProps> = ({
 }) => {
   const currentProfile = useAppStore((state) => state.currentProfile);
   const staffMode = usePreferencesStore((state) => state.staffMode);
-  const clearMessagesBadge = useMessagePersistStore(
-    (state) => state.clearMessagesBadge
-  );
   const { ensNames, selectedTab, setSelectedTab, setConversationKey } =
     useMessageStore();
 
   const [showSearchModal, setShowSearchModal] = useState(false);
   const { persistProfile } = useMessageDb();
-
-  useEffect(() => {
-    if (!currentProfile) {
-      return;
-    }
-    clearMessagesBadge(currentProfile.id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentProfile]);
 
   const showAuthenticating = currentProfile && authenticating;
 

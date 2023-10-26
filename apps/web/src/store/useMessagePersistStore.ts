@@ -1,14 +1,8 @@
 import { Localstorage } from '@hey/data/storage';
-import { toNanoString } from '@xmtp/xmtp-js';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// Each Map is storing a profileId as the key.
 interface MessagePersistState {
-  viewedMessagesAtNs: Map<string, string | undefined>;
-  showMessagesBadge: Map<string, boolean>;
-  setShowMessagesBadge: (showMessagesBadge: Map<string, boolean>) => void;
-  clearMessagesBadge: (profileId: string) => void;
   unsentMessages: Map<string, string>;
   setUnsentMessage: (key: string, message: string | null) => void;
 }
@@ -16,22 +10,6 @@ interface MessagePersistState {
 export const useMessagePersistStore = create(
   persist<MessagePersistState>(
     (set) => ({
-      viewedMessagesAtNs: new Map(),
-      showMessagesBadge: new Map(),
-      setShowMessagesBadge: (showMessagesBadge) =>
-        set(() => ({ showMessagesBadge })),
-      clearMessagesBadge: (profileId: string) => {
-        set((state) => {
-          const viewedAt = new Map(state.viewedMessagesAtNs);
-          viewedAt.set(profileId, toNanoString(new Date()));
-          if (!state.showMessagesBadge.get(profileId)) {
-            return { viewedMessagesAtNs: viewedAt };
-          }
-          const show = new Map(state.showMessagesBadge);
-          show.set(profileId, false);
-          return { viewedMessagesAtNs: viewedAt, showMessagesBadge: show };
-        });
-      },
       unsentMessages: new Map(),
       setUnsentMessage: (key: string, message: string | null) =>
         set((state) => {
@@ -54,8 +32,6 @@ export const useMessagePersistStore = create(
             ...data,
             state: {
               ...data.state,
-              viewedMessagesAtNs: Array.from(data.state.viewedMessagesAtNs),
-              showMessagesBadge: Array.from(data.state.showMessagesBadge),
               unsentMessages: Array.from(data.state.unsentMessages)
             }
           });
