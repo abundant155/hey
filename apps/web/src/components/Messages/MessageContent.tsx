@@ -1,5 +1,4 @@
 import Markup from '@components/Shared/Markup';
-import type { Profile } from '@hey/lens';
 import getMentions from '@hey/lib/getMentions';
 import type { DecodedMessage } from '@xmtp/xmtp-js';
 import type { FC, ReactNode } from 'react';
@@ -9,21 +8,12 @@ import {
   isQueuedMessage,
   type PendingMessage
 } from 'src/hooks/useSendOptimisticMessage';
-import { ContentTypeRemoteAttachment } from 'xmtp-content-type-remote-attachment';
-
-import RemoteAttachmentPreview from './RemoteAttachmentPreview';
 
 interface MessageContentProps {
   message: DecodedMessage | PendingMessage | FailedMessage;
-  profile: Profile | undefined;
-  sentByMe: boolean;
 }
 
-const MessageContent: FC<MessageContentProps> = ({
-  message,
-  profile,
-  sentByMe
-}) => {
+const MessageContent: FC<MessageContentProps> = ({ message }) => {
   const previewRef = useRef<ReactNode | undefined>();
 
   if (message.error) {
@@ -40,17 +30,6 @@ const MessageContent: FC<MessageContentProps> = ({
       previewRef.current = message.render;
     }
     return previewRef.current;
-  }
-
-  if (message.contentType.sameAs(ContentTypeRemoteAttachment)) {
-    return (
-      <RemoteAttachmentPreview
-        remoteAttachment={message.content}
-        profile={profile}
-        sentByMe={sentByMe}
-        preview={previewRef.current}
-      />
-    );
   }
 
   return (

@@ -17,8 +17,6 @@ import { ContentTypeText } from '@xmtp/xmtp-js';
 import type { FC } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
 import { useMessageStore } from 'src/store/useMessageStore';
-import type { RemoteAttachment } from 'xmtp-content-type-remote-attachment';
-import { ContentTypeRemoteAttachment } from 'xmtp-content-type-remote-attachment';
 
 interface PreviewProps {
   ensName?: string;
@@ -35,9 +33,6 @@ interface MessagePreviewProps {
 const MessagePreview: FC<MessagePreviewProps> = ({ message }) => {
   if (message.contentType.sameAs(ContentTypeText)) {
     return <span>{message.content}</span>;
-  } else if (message.contentType.sameAs(ContentTypeRemoteAttachment)) {
-    const remoteAttachment: RemoteAttachment = message.content;
-    return <span>{remoteAttachment.filename}</span>;
   } else {
     return <span>''</span>;
   }

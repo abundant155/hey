@@ -4,10 +4,6 @@ import { Client } from '@xmtp/xmtp-js';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppStore } from 'src/store/useAppStore';
 import { useMessageStore } from 'src/store/useMessageStore';
-import {
-  AttachmentCodec,
-  RemoteAttachmentCodec
-} from 'xmtp-content-type-remote-attachment';
 
 import useEthersWalletClient from './useEthersWalletClient';
 
@@ -71,9 +67,6 @@ const useXmtpClient = (cacheOnly = false) => {
           privateKeyOverride: keys,
           persistConversations: true
         });
-
-        xmtp.registerCodec(new AttachmentCodec());
-        xmtp.registerCodec(new RemoteAttachmentCodec());
 
         setClient(xmtp);
         setAwaitingXmtpAuth(false);

@@ -7,7 +7,6 @@ import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useMessageStore } from 'src/store/useMessageStore';
 import { v4 as uuid } from 'uuid';
-import type { RemoteAttachment } from 'xmtp-content-type-remote-attachment';
 
 type ResolveReject<T = void> = (value: T | PromiseLike<T>) => void;
 
@@ -61,7 +60,7 @@ type PendingQueueItem = {
   resolve: (value: boolean) => void;
 };
 
-export type AllowedContent = string | RemoteAttachment;
+export type AllowedContent = string;
 
 export type SendMessageContent<T extends AllowedContent = string> =
   T extends string ? T : () => Promise<T>;
@@ -151,11 +150,8 @@ const useSendOptimisticMessage = (
 
     // if message hasn't been prepared yet, prepare it
     if (!sendOptions?.preparedMessage) {
-      const preparedContent =
-        typeof content === 'string' ? content : await content();
-
       // prepare message to be sent
-      prepared = await conversation.prepareMessage(preparedContent, {
+      prepared = await conversation.prepareMessage(content, {
         contentType,
         contentFallback: sendOptions?.fallback
       });
