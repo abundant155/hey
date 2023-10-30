@@ -22,7 +22,7 @@ const youtubeRegex =
   /^https?:\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w-]+)(?:\?.*)?$/;
 const lenstubeRegex =
   /^https?:\/\/lenstube\.xyz\/watch\/[\dA-Za-z-]+(\?si=[\dA-Za-z]+)?$/;
-const lvprUrlRegex = 
+const livepeerRegex = 
   /^https?:\/\/lvpr\.tv\/\?v=[0-9a-z]{16}$/;
 
 const generateIframe = (
@@ -78,7 +78,7 @@ const generateIframe = (
 
       return null;
     case 'lvpr.tv':
-      if (lvprUrlRegex.test(url)) {
+      if (livepeerRegex.test(url)) {
         return `<iframe src="${pickedUrl}" ${universalSize}></iframe>`;
       }
       return null;
